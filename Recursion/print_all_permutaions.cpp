@@ -53,3 +53,21 @@ int main() {
 
     return 0;
 }
+
+    /*
+    ====================================================
+    TIME COMPLEXITY:
+    ----------------------------------------------------
+    O(n! * n)
+    - n! permutations
+    - Copying each permutation costs O(n)
+
+    SPACE COMPLEXITY:
+    ----------------------------------------------------
+    O(n)
+    - Recursion stack
+    - Frequency array
+    - Temporary permutation list
+    - Output space not counted
+    ====================================================
+    */

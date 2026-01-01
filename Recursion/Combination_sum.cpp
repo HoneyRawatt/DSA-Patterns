@@ -39,3 +39,16 @@ int main() {
 
     return 0;
 }
+
+// ⏱️ Time Complexity
+// O(2^t * k)
+// t = target value
+// Each valid combination is copied (size ≈ k)
+// Exponential due to recursion tree
+// In worst case (arr contains 1), depth can go up to target
+
+
+// 📦 Space Complexity
+// O(k)
+// k = maximum depth of recursion (length of one combination)
+// Output space not counted

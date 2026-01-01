@@ -42,3 +42,15 @@ int main() {
 
     return 0;
 }
+
+// ⏱️ Time Complexity
+// O(2^n * k)
+// n = number of elements
+// Each subset explored once
+// Copying a valid combination costs O(k)
+// Pruning + duplicate skipping reduces actual runtime
+
+// 📦 Space Complexity
+// O(k)
+// k = maximum depth of recursion
+// Output space not counted

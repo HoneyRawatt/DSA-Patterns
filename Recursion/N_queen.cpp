@@ -68,7 +68,7 @@ void solve_optimized(int col, vector<string>& board, vector<vector<string>>& ans
         }
 
         for(int row=0;row<n;row++){
-            if(leftrow[row]==0 && lowerdiagonal[row+col]==0 && upperdigonal[n-1+col+row]==0){
+            if(leftrow[row]==0 && lowerdiagonal[row+col]==0 && upperdigonal[n-1+col-row]==0){
                 board[row][col]='Q';
                 leftrow[row]=1;
                 lowerdiagonal[row+col]=1;

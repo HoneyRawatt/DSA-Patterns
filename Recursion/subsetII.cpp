@@ -36,3 +36,21 @@ int main() {
 
     return 0;
 }
+
+    /*
+    ====================================================
+    TIME COMPLEXITY:
+    ----------------------------------------------------
+    O(2^n)
+    - Each element has two choices: take or not take
+    - Duplicate skipping avoids repeated subsets but
+      worst-case complexity remains exponential
+
+    SPACE COMPLEXITY:
+    ----------------------------------------------------
+    O(n)
+    - Recursion stack depth
+    - Temporary subset list (ds)
+    - Output space not counted
+    ====================================================
+    */
