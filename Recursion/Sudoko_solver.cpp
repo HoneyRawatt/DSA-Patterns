@@ -1,6 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+    /*
+    =====================================================
+    INTUITION:
+    -----------------------------------------------------
+    - Sudoku is a classic backtracking problem.
+    - We try to fill empty cells ('.') one by one.
+    - For each empty cell, try digits '1' to '9'.
+    - Place a digit only if it is VALID:
+        1) Not in the same row
+        2) Not in the same column
+        3) Not in the same 3x3 sub-grid
+    - If placing a digit leads to a solution → return true.
+    - Otherwise, BACKTRACK (remove the digit and try next).
+    =====================================================
+    */
+
+    /*
+    =====================================================
+    TIME & SPACE COMPLEXITY:
+    -----------------------------------------------------
+    Time Complexity:
+        O(9^(N))
+        - N = number of empty cells
+        - Each cell has at most 9 choices
+
+    Space Complexity:
+        O(1) extra space (ignoring recursion stack)
+        - Board is modified in-place
+        - Recursion depth ≤ 81
+    =====================================================
+    */
+
 bool isValid(vector<vector<char>> &board, int row, int col, char c) {
     for (int i = 0; i < 9; i++) {
         if (board[i][col] == c) return false; // check column
