@@ -2,6 +2,20 @@
 #include<vector>
 using namespace std;
 
+    /*
+     * Time Complexity (Both lower & upper bound):
+     * -------------------------------------------
+     * Each function uses binary search.
+     * The search space is halved every iteration.
+     *
+     * Time Complexity: O(log n)
+     *
+     * Space Complexity:
+     * -----------------
+     * Iterative approach → no recursion stack.
+     *
+     * Space Complexity: O(1)
+     */
 //search insert index problem
 int lower_bound(const vector<int>& arr, int target) {
     int low = 0;

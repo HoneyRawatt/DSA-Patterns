@@ -2,8 +2,26 @@
 #include<vector>
 #include<algorithm>
 using namespace std;
-//time comp- O(n2) and space comp - O(1)
-// Function to perform Selection Sort
+    /*
+     * Time Complexity Intuition:
+     * --------------------------
+     * We use two nested loops.
+     * - Outer loop runs (n - 1) times.
+     * - Inner loop runs (n - i - 1) times for each i.
+     * 
+     * Total comparisons ≈ n(n - 1)/2 → O(n^2)
+     * 
+     * Best, Average, Worst case: O(n^2)
+     * (Because selection sort always scans the remaining array fully)
+     *
+     * Space Complexity Intuition:
+     * ---------------------------
+     * - Sorting is done in-place.
+     * - Only a few variables (i, j, mini) are used.
+     * - No extra data structures are created.
+     *
+     * Space Complexity: O(1)
+     */
 void selection_sort(vector<int>& arr) {
     int n = arr.size();
     for(int i = 0; i < n - 1; i++) {

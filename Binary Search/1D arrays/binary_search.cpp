@@ -1,7 +1,27 @@
 #include<iostream>
 #include<vector>
 using namespace std;
+    /*
+     * Binary Search Prerequisite:
+     * ---------------------------
+     * The array MUST be sorted.
+     */
 
+    /*
+     * Time Complexity Intuition (Iterative & Recursive):
+     * --------------------------------------------------
+     * At each step, the search space is reduced to half.
+     *
+     * Time Complexity:
+     * Best Case   : O(1)    (target found at mid)
+     * Average Case: O(log n)
+     * Worst Case  : O(log n)
+     *
+     * Space Complexity:
+     * -----------------
+     * Iterative Version : O(1)  (no recursion stack)
+     * Recursive Version : O(log n) (due to recursion stack)
+     */
 int iterative_binarySearch(vector<int>arr,int target){
     int low=0;
     int high=arr.size()-1;

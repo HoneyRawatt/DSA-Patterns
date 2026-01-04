@@ -2,6 +2,14 @@
 #include <vector>
 using namespace std;
 
+    // Binary Search approach
+    // Time Complexity: O(log n)
+    // Space Complexity: O(1)
+    //
+    // Intuition:
+    // - A peak element is greater than its neighbors
+    // - If the slope is rising, a peak lies on the right
+    // - If the slope is falling, a peak lies on the left
 // Function to find a peak element index in an array
 int find_peak(vector<int>& arr) {
     int n = arr.size();
@@ -32,6 +40,9 @@ int find_peak(vector<int>& arr) {
     return -1; // Should never reach here if input has at least one peak
 }
 
+    // Linear search approach
+    // Time Complexity: O(n)
+    // Space Complexity: O(1)
 // Function to find a peak using linear search
 int find_peak_linear(vector<int>& arr) {
     int n = arr.size();

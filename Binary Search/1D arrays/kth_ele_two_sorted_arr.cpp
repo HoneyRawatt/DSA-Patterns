@@ -3,6 +3,18 @@
 #include <iostream>
 using namespace std;
 
+    /*
+     * 🧠 INTUITION:
+     * -------------
+     * - We perform binary search on the smaller array.
+     * - We partition both arrays such that:
+     *     left part has exactly k elements.
+     * - The k-th smallest element is:
+     *     max(left part of array1, left part of array2)
+     *
+     * Time Complexity: O(log(min(n1, n2)))
+     * Space Complexity: O(1)
+     */
 int find_kth_ele(vector<int> a, vector<int> b, int k) {
     int n1 = a.size();
     int n2 = b.size();

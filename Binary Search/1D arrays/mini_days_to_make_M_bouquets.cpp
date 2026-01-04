@@ -4,6 +4,11 @@
 using namespace std;
 
 
+    // Helper function to check feasibility
+    // Can we make at least m bouquets by 'days'?
+    //
+    // Time Complexity: O(n)
+    // Space Complexity: O(1)
 // Helper function to check if it's possible to make 'm' bouquets
 // on or before day 'mid', using 'k' adjacent flowers per bouquet
 bool possible(vector<int> arr, int days, int m, int k) {
@@ -11,7 +16,7 @@ bool possible(vector<int> arr, int days, int m, int k) {
     for (int i = 0; i < arr.size(); i++) {
         if (arr[i] <= days) cnt++;
         else {
-            noofb += cnt / k; // Form as many bouquets as possible
+            noofb += cnt / k; // Form as m  any bouquets as possible
             cnt = 0;
         }
     }
@@ -19,7 +24,9 @@ bool possible(vector<int> arr, int days, int m, int k) {
     return noofb >= m;
 }
 
-
+    // Brute Force Approach
+    // Time Complexity: O((maxDay - minDay) * n)
+    // Space Complexity: O(1)
 // Brute-force approach to try every day
 int roseGardenBrute(vector<int> arr, int m, int k) {
     long long required = 1LL * m * k;
@@ -41,7 +48,14 @@ int roseGardenBrute(vector<int> arr, int m, int k) {
     return -1; // Should not reach here unless invalid input
 }
 
-
+    // Optimized Binary Search Approach
+    // Time Complexity: O(n log(maxDay - minDay))
+    // Space Complexity: O(1)
+    //
+    // Intuition:
+    // - Answer lies between minimum and maximum bloom day
+    // - If we can make bouquets on day = mid,
+    //   try earlier days (minimize answer)
 // Main function to find the minimum day to make 'm' bouquets of 'k' flowers
 int roseGarden(vector<int> arr, int m, int k) {
     long long val = 1LL * m * k;

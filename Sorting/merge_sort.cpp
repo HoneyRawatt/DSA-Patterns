@@ -3,8 +3,24 @@
 #include<algorithm>
 using namespace std;
 
-// Time Complexity: O(n log n) in all cases (worst, average, best)
-// Space Complexity: O(n) due to the use of temporary vectors
+    /*
+     * Time Complexity Intuition:
+     * --------------------------
+     * - The array is recursively divided into two halves → log₂(n) levels.
+     * - At each level, merging takes O(n) time.
+     *
+     * Total Time Complexity:
+     * Worst Case  : O(n log n)
+     * Average Case: O(n log n)
+     * Best Case   : O(n log n)
+     *
+     * Space Complexity Intuition:
+     * ---------------------------
+     * - A temporary array is used during each merge step.
+     * - Extra space proportional to the size of the array is required.
+     *
+     * Space Complexity: O(n)
+     */
 
 void merge(vector<int>& arr, int low, int mid, int high) {
     vector<int> temp;

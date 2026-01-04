@@ -1,7 +1,15 @@
 #include<iostream>
 #include<vector>
 using namespace std;
-
+    /*
+     * Time Complexity (all methods):
+     * ------------------------------
+     * O(log n) → binary search
+     *
+     * Space Complexity:
+     * -----------------
+     * O(1) → iterative, no extra space
+     */
 int lower_bound(const vector<int>& arr, int target) {
     int low = 0;
     int lb = arr.size();

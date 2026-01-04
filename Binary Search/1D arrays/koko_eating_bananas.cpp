@@ -3,7 +3,15 @@
 #include <algorithm>
 using namespace std;
 
-
+    // Brute Force Approach
+    // Time Complexity: O(maxPile * n)
+    // Space Complexity: O(1)
+    //
+    // Intuition:
+    // - Try every possible eating speed from 1 to max pile
+    // - For each speed, calculate total hours required
+    // - First speed that takes <= h hours is the answer
+    
 int minEatingSpeedBrute(vector<int>& piles, int h) {
     int maxPile = *max_element(piles.begin(), piles.end());
     
@@ -20,11 +28,20 @@ int minEatingSpeedBrute(vector<int>& piles, int h) {
 
     return maxPile; // Fallback, should never be needed
 }
+    // Binary Search (Optimized)
+    // Time Complexity: O(n log maxPile)
+    // Space Complexity: O(1)
+    //
+    // Intuition:
+    // - Minimum speed = 1
+    // - Maximum speed = max pile size
+    // - If a speed works, try smaller speed
+    // - If it doesn't, increase speed
     int minEatingSpeed(std::vector<int>& piles, int h) {
         // Minimum possible eating speed is 1
         // Maximum is the size of the largest pile
         int left = 1;
-        int right = *std::max_element(piles.begin(), piles.end());
+        int right = *max_element(piles.begin(), piles.end());
         int ans = right;
 
         while (left <= right) {

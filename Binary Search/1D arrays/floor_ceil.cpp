@@ -2,6 +2,29 @@
 #include<vector>
 using namespace std;
 
+    /*
+     * Ceil:
+     * -----
+     * Smallest element in the array that is >= target
+     *
+     * Floor:
+     * ------
+     * Largest element in the array that is <= target
+     *
+     * Prerequisite:
+     * -------------
+     * Array must be sorted.
+     *
+     * Time Complexity:
+     * ----------------
+     * O(log n) for both ceil and floor
+     * (binary search halves the search space each time)
+     *
+     * Space Complexity:
+     * -----------------
+     * O(1) → iterative binary search, no extra space
+     */
+    
 int ceil(const vector<int>& arr, int target) {
     int low = 0;
     int high = arr.size() - 1;

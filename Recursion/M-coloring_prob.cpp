@@ -1,6 +1,19 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+
+    /*
+    ============================
+    INTUITION
+    ============================
+    - We try to color each node one by one.
+    - For every node, we try all possible colors from 1 to m.
+    - Before assigning a color, we check if any adjacent node
+      already has the same color.
+    - If a color causes a conflict, we backtrack and try another color.
+    - If all nodes are successfully colored, return true.
+    */
+
 bool issafe(int node,int color[],bool graph[101][101],int n,int col){
     for(int k=0;k<n;k++){
         if(k!=node && graph[k][node]==1 && color[k]==col){
@@ -11,16 +24,18 @@ bool issafe(int node,int color[],bool graph[101][101],int n,int col){
 }
 
 bool solve(int node,int color[],int m,int N,bool graph[101][101]){
-if(node==N) return true;
+    if(node == N) return true;
 
-for(int i=0;i<=m;i++){
-    if(issafe(node,color,graph,N,i)){
-        color[node]=i;
-        if(solve(node+1,color,m,N,graph))return true;
-        color[node]=0;
+    for(int i = 1; i <= m; i++){
+        if(issafe(node, color, graph, N, i)){
+            color[node] = i;
+            if(solve(node+1, color, m, N, graph)) return true;
+            color[node] = 0;
+        }
     }
+    return false;
 }
-}
+
 
 bool graphcoloring(bool graph[101][101],int m,int N){
     int color[N]={0};
@@ -48,3 +63,18 @@ int main() {
 
     return 0;
 }
+/*
+============================
+TIME & SPACE COMPLEXITY
+============================
+
+Time Complexity:
+- In the worst case, for each node we try all m colors.
+- Total possibilities = m^n
+- Hence: O(m^n)
+
+Space Complexity:
+- Color array: O(n)
+- Recursion stack: O(n)
+- Total Space: O(n)
+*/

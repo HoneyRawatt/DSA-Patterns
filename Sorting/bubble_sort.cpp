@@ -2,14 +2,25 @@
 #include<vector>
 #include<algorithm>
 using namespace std;
-//Worst Case Time Complexity: O(n²)
-// (when the array is in reverse order)
 
-// Best Case Time Complexity: O(n)
-// (when the array is already sorted — due to early stopping)
-
-// Space Complexity: O(1)
-// (in-place sorting, no extra space used)
+    /*
+     * Worst Case Time Complexity: O(n^2)
+     * ---------------------------------
+     * Occurs when the array is in reverse order.
+     * For each pass, we compare adjacent elements across the array.
+     *
+     * Best Case Time Complexity: O(n)
+     * -------------------------------
+     * Occurs when the array is already sorted.
+     * Due to the didSwap flag, the algorithm stops after the first pass.
+     *
+     * Average Case Time Complexity: O(n^2)
+     *
+     * Space Complexity: O(1)
+     * ----------------------
+     * In-place sorting.
+     * Only a few variables are used (i, j, didSwap).
+     */
 
 void bubble_sort(vector<int>&arr){
     for(int i=arr.size()-1;i>=0;i--){

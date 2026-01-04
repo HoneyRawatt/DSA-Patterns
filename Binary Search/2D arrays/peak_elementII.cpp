@@ -2,7 +2,12 @@
 #include <vector>
 using namespace std;
 
-    // Find the row index with the maximum value in a given column
+    /*
+     * 🧠 Find the row index with the maximum value in a given column
+     * --------------------------------------------------------------
+     * Time Complexity: O(n)
+     * Space Complexity: O(1)
+     */
     int findmaxind(vector<vector<int>>& mat, int n, int col) {
         int maxvalue = -1;
         int ind = -1;
@@ -14,8 +19,17 @@ using namespace std;
         }
         return ind;
     }
-
-    // Binary search on columns to find a peak element
+    /*
+     * 🚀 Binary Search on Columns to find a peak element
+     * -------------------------------------------------
+     * 🧠 INTUITION:
+     * - At each column, find the row with the largest value.
+     * - Compare with left & right neighbors.
+     * - Move towards the direction with a larger neighbor.
+     *
+     * Time Complexity: O(n * log m)
+     * Space Complexity: O(1)
+     */
     vector<int> findPeakGrid(vector<vector<int>>& mat) {
         int n = mat.size(), m = mat[0].size();
         int low = 0, high = m - 1;

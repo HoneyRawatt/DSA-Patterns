@@ -2,7 +2,10 @@
 #include <vector>
 using namespace std;
 
-
+// Brute-force approach
+// Time Complexity: O(n)
+// Space Complexity: O(1)
+// Idea: Compare each element with its neighbors
 // Brute-force: Linear scan comparing neighbors
 int find_single_element_brute(vector<int> arr) {
     int n = arr.size();
@@ -22,6 +25,12 @@ int find_single_element_brute(vector<int> arr) {
     return -1; // Should not happen for valid input
 }
 
+// Optimized Binary Search approach
+// Time Complexity: O(log n)
+// Space Complexity: O(1)
+// Intuition:
+// - Before the single element → pairs start at EVEN index
+// - After the single element  → pairs start at ODD index
 // Function to find the single element in a sorted array
 int find_single_element(vector<int> arr) {
     int n = arr.size();

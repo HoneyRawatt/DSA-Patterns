@@ -3,7 +3,11 @@
 #include<climits>
 using namespace std;
 
-
+    /*
+     * Time Complexity: O(log n) on average
+     * Worst Case with duplicates: O(n) (due to boundary shrinking)
+     * Space Complexity: O(1)
+     */
 // Function to find the number of times a sorted array is rotated
 int findRotationCount(vector<int>& arr) {
     int low = 0, high = arr.size() - 1;

@@ -4,7 +4,19 @@
 #include<numeric> // For accumulate
 using namespace std;
 
-// Count how many students are needed if max allowed pages is 'pages'
+    /*
+     * 🧠 INTUITION (Helper Function):
+     * --------------------------------
+     * Given a maximum allowed pages limit (`pages`),
+     * we count how many students are required if:
+     * - Each student gets contiguous books.
+     * - No student gets more than `pages`.
+     *
+     * If pages exceed limit, assign next book to a new student.
+     *
+     * Time Complexity: O(N)
+     * Space Complexity: O(1)
+     */
 int countStudent(vector<int> arr, int pages) {
     int students = 1;
     long long pagesStudent = 0;
@@ -21,7 +33,20 @@ int countStudent(vector<int> arr, int pages) {
     return students;
 }
 
-// Brute-force version: Try every possible max page from max(books) to sum(books)
+
+    /*
+     * 🐢 BRUTE FORCE APPROACH
+     * ------------------------
+     * - Try every possible maximum pages value
+     *   from max(book pages) to sum(book pages).
+     * - For each value, check how many students are needed.
+     * - First valid value is the answer.
+     *
+     * Time Complexity:
+     *   O((sum - max) * N) → Very slow
+     *
+     * Space Complexity: O(1)
+     */
 int findPagesBrute(vector<int>& arr, int m, int n) {
     if (m > n) return -1;
 
@@ -37,7 +62,29 @@ int findPagesBrute(vector<int>& arr, int m, int n) {
     return -1;  // Shouldn't reach here
 }
 
-// Binary Search on answer to find the minimum pages that can be assigned
+
+    /*
+     * 🚀 OPTIMIZED APPROACH (Binary Search on Answer)
+     * -----------------------------------------------
+     * 🧠 INTUITION:
+     * - We are minimizing the maximum pages assigned to any student.
+     * - If we can allocate books with max pages = X,
+     *   then we can also allocate with any value > X.
+     * - If we cannot allocate with X,
+     *   then any value < X will also fail.
+     *
+     * Search Space:
+     * - Minimum = max(book pages)
+     * - Maximum = sum(book pages)
+     *
+     * Time Complexity:
+     *   Sorting not required
+     *   Binary Search → O(log(sum - max))
+     *   Count check → O(N)
+     *   Overall → O(N log(sum))
+     *
+     * Space Complexity: O(1)
+     */
 int findPages(vector<int>& arr, int m, int n) {
     if (m > n) return -1;  // Can't assign if students > books
 

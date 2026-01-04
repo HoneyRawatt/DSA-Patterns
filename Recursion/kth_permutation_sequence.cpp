@@ -40,3 +40,19 @@ int main() {
 
     return 0;
 }
+
+/*
+============================
+TIME & SPACE COMPLEXITY
+============================
+
+Time Complexity:
+- We perform n iterations.
+- Removing an element from ArrayList costs O(n).
+- Overall Time Complexity: O(n^2)
+
+Space Complexity:
+- List to store numbers: O(n)
+- StringBuilder: O(n)
+- Overall Space Complexity: O(n)
+*/

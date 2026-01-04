@@ -2,6 +2,18 @@
 #include<vector>
 using namespace std;
 
+    /*
+     * CASE 1: Array has UNIQUE elements
+     *
+     * Time Complexity:
+     * ----------------
+     * O(log n) → normal binary search
+     *
+     * Space Complexity:
+     * -----------------
+     * O(1)
+     */
+
 // Search in rotated sorted array
 int find_element_unique(vector<int> arr, int target) {
     int low = 0, high = arr.size() - 1;
@@ -31,6 +43,18 @@ int find_element_unique(vector<int> arr, int target) {
     return -1;
 }
 
+    /*
+     * CASE 2: Array has DUPLICATE elements
+     *
+     * Time Complexity:
+     * ----------------
+     * Average Case: O(log n)
+     * Worst Case  : O(n)  → when many duplicates exist
+     *
+     * Space Complexity:
+     * -----------------
+     * O(1)
+     */
 int find_element_duplicate(vector<int> arr, int target) {
     int low = 0, high = arr.size() - 1;
 

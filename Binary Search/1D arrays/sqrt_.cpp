@@ -2,6 +2,15 @@
 #include<vector>
 using namespace std;
 
+    // Function to find floor value of square root of n
+    // Time Complexity: O(log n)
+    // Space Complexity: O(1)
+    //
+    // Intuition:
+    // - Square root lies between 1 and n
+    // - Use binary search to avoid overflow
+    // - If mid*mid <= n, mid can be an answer
+    // - Store it and try to find a bigger valid value
 int sqrt_(int n) {
     if (n == 0 || n == 1) return n;
 

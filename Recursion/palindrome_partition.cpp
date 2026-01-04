@@ -48,3 +48,21 @@ int main() {
 
     return 0;
 }
+
+/*
+============================
+TIME & SPACE COMPLEXITY
+============================
+
+Time Complexity:
+- There are 2^(N-1) possible ways to partition a string of length N.
+- For each partition, palindrome checking takes O(N).
+- Overall Time Complexity: O(2^N * N)
+
+Space Complexity:
+- Recursion stack depth: O(N)
+- Path list: O(N)
+- Result storage: O(2^N * N)
+- Overall Auxiliary Space (excluding output): O(N)
+*/
+ 

@@ -2,12 +2,24 @@
 #include<vector>
 #include<algorithm>
 using namespace std;
-//Worst Case Time Complexity: O(n²)
-
-// Best Case Time Complexity: O(n)
-// (when the array is already sorted — due to early stopping)
-
-// Space Complexity: O(1)
+    /*
+     * Worst Case Time Complexity: O(n^2)
+     * ---------------------------------
+     * Occurs when the array is sorted in reverse order.
+     * Each new element is compared and shifted across the entire sorted part.
+     *
+     * Best Case Time Complexity: O(n)
+     * -------------------------------
+     * Occurs when the array is already sorted.
+     * The while loop never executes (early stopping).
+     *
+     * Average Case Time Complexity: O(n^2)
+     *
+     * Space Complexity: O(1)
+     * ----------------------
+     * In-place sorting.
+     * Only constant extra space is used.
+     */
 
 
 void insertion_sort(vector<int>&arr){

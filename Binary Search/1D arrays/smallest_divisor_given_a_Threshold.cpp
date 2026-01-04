@@ -3,7 +3,31 @@
 #include<algorithm>
 using namespace std;
 
-// Helper function to compute sum of ceilings (arr[i] / div) for all elements
+    /*
+     * INTUITION:
+     * ----------
+     * We are looking for the smallest divisor such that:
+     * sum( ceil(nums[i] / divisor) ) <= limit
+     *
+     * If divisor is SMALL  → division result is LARGE → sum is LARGE
+     * If divisor is LARGE  → division result is SMALL → sum is SMALL
+     *
+     * Hence, the sum function is MONOTONICALLY DECREASING.
+     * This allows us to apply BINARY SEARCH on the answer (divisor).
+     *
+     * TIME COMPLEXITY:
+     * ----------------
+     * For one divisor check: O(n)
+     * Binary search range: log(max(nums))
+     * Overall: O(n * log(max(nums)))
+     *
+     * SPACE COMPLEXITY:
+     * -----------------
+     * O(1) – No extra space used
+     */
+
+    // Helper function to calculate:
+    // sum = Σ ceil(nums[i] / div)
 int sumbyd(vector<int> arr, int div,int limit) {
     int sum = 0;
     for (int i = 0; i < arr.size(); i++) {
@@ -14,7 +38,17 @@ int sumbyd(vector<int> arr, int div,int limit) {
     return sum;
 }
 
-// Brute-force: Try every divisor from 1 to max(arr)
+    /*
+     * BRUTE FORCE APPROACH
+     *
+     * Try every possible divisor from 1 to max(nums)
+     * Return the first divisor for which sumByDiv <= limit
+     *
+     * TIME COMPLEXITY: O(n * max(nums))
+     * SPACE COMPLEXITY: O(1)
+     *
+     * This approach is slow and not suitable for large inputs.
+     */
 int smallestDivisorBrute(vector<int> arr, int limit) {
     int maxVal = *max_element(arr.begin(), arr.end());
 
@@ -27,7 +61,23 @@ int smallestDivisorBrute(vector<int> arr, int limit) {
     return maxVal; // Fallback, though this line should never be reached
 }
 
-// Binary search to find the smallest divisor such that sumbyd <= limit
+    /*
+     * OPTIMAL APPROACH – BINARY SEARCH ON ANSWER
+     *
+     * Search space:
+     * low  = 1
+     * high = max(nums)
+     *
+     * For each mid divisor:
+     *  - If sumByDiv(mid) <= limit → valid divisor, try smaller
+     *  - Else → divisor too small, try bigger
+     *
+     * TIME COMPLEXITY:
+     * O(n * log(max(nums)))
+     *
+     * SPACE COMPLEXITY:
+     * O(1)
+     */
 int smallestDivisor(vector<int> arr, int limit) {
     int low = 1;
     int high = *max_element(arr.begin(), arr.end()); // max value in array

@@ -3,7 +3,18 @@
 #include<algorithm>
 using namespace std;
 
-// 🧠 Helper function to check if we can place all cows with at least `dist` minimum distance between them
+    /*
+     * 🧠 INTUITION (Helper Function):
+     * --------------------------------
+     * We try to place cows greedily.
+     * - Place the first cow in the first stall.
+     * - For every next stall, place a cow only if
+     *   the distance from the last placed cow is >= dist.
+     * - If we can place at least 'cows' cows, return true.
+     *
+     * Time Complexity: O(N)
+     * Space Complexity: O(1)
+     */
 bool canWePlace(vector<int>& arr, int dist, int cows) {
     int countCows = 1;         // Place first cow at the first stall
     int lastPlaced = arr[0];   // Last cow was placed at index 0
@@ -18,7 +29,21 @@ bool canWePlace(vector<int>& arr, int dist, int cows) {
     return countCows >= cows;
 }
 
-// Brute-force: Try all distances from 1 to max possible
+    /*
+     * 🐢 BRUTE FORCE APPROACH
+     * ------------------------
+     * - Sort stall positions.
+     * - Try every possible minimum distance from 1 to maxDist.
+     * - For each distance, check if placement is possible.
+     * - Stop when placement fails.
+     *
+     * Time Complexity:
+     *   Sorting → O(N log N)
+     *   Checking distances → O(maxDist * N)
+     *   Overall → O(N log N + maxDist * N)
+     *
+     * Space Complexity: O(1)
+     */
 int aggressiveCowsBrute(vector<int>& arr, int cows) {
     sort(arr.begin(), arr.end());
 
@@ -36,7 +61,28 @@ int aggressiveCowsBrute(vector<int>& arr, int cows) {
     return ans;
 }
 
-// 🧠 Main function to find the largest minimum distance
+    /*
+     * 🚀 OPTIMIZED APPROACH (Binary Search on Answer)
+     * -----------------------------------------------
+     * 🧠 INTUITION:
+     * - We are maximizing the minimum distance.
+     * - If we can place cows with distance 'd',
+     *   then we can also place them with any smaller distance.
+     * - If we cannot place cows with distance 'd',
+     *   then any larger distance will also fail.
+     *
+     * Search Space:
+     * - Minimum distance = 1
+     * - Maximum distance = last stall - first stall
+     *
+     * Time Complexity:
+     *   Sorting → O(N log N)
+     *   Binary Search → O(log(maxDist))
+     *   Placement check per mid → O(N)
+     *   Overall → O(N log N)
+     *
+     * Space Complexity: O(1)
+     */
 int aggressive_cows(vector<int>& arr, int cows) {
     sort(arr.begin(), arr.end()); // Sort stall positions
 

@@ -1,7 +1,10 @@
 #include<iostream>
 using namespace std;
-
-// Helper to compute mid^n and compare with m
+    // Helper function to compare mid^n with m
+    // Returns:
+    // 1 -> mid^n == m (perfect match)
+    // 0 -> mid^n < m  (too small)
+    // 2 -> mid^n > m  (too large)
 int fun(int mid, int n, int m) {
     long long ans = 1;
     for (int i = 1; i <= n; i++) {
@@ -12,6 +15,15 @@ int fun(int mid, int n, int m) {
     return 0;                     // Too small
 }
 
+
+    // Binary Search approach
+    // Time Complexity: O(n log m)
+    // Space Complexity: O(1)
+    //
+    // Intuition:
+    // - The nth root lies between 1 and m
+    // - Use binary search to reduce search space
+    // - Compare mid^n with m safely using long
 int find_nth_root(int n, int m) {
     int low = 1, high = m;
 
@@ -27,7 +39,11 @@ int find_nth_root(int n, int m) {
     return -1; // Not a perfect nth root
 }
 
-//linearly
+    // Linear Search approach
+    // Time Complexity: O(m * n)
+    // Space Complexity: O(1)
+    //
+    // Used only for understanding / brute force
 int nth_root_linear(int n, int m) {
     for (int x = 1; x <= m; x++) {
         long long power = 1;
