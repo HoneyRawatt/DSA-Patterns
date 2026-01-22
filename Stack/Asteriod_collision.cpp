@@ -3,41 +3,106 @@
 using namespace std;
 
 /*
-    Function: asteroidCollision
-    ---------------------------
-    Simulates asteroid collisions based on directions and sizes.
-    Positive values move right, negative values move left.
+=====================================================
+PROBLEM STATEMENT:
+-----------------------------------------------------
+Given an array of integers representing asteroids in a row.
 
-    Parameters:
-        arr - vector of integers representing asteroids
+- Absolute value  -> size of the asteroid
+- Sign:
+    positive  -> moving to the right
+    negative  -> moving to the left
 
-    Returns:
-        vector<int> - state of asteroids after all collisions
+When two asteroids collide:
+- The smaller one explodes
+- If both are the same size, both explode
+- Asteroids moving in the same direction never collide
+
+Return the final state of asteroids after all collisions.
+=====================================================
+*/
+
+/*
+=====================================================
+INTUITION:
+-----------------------------------------------------
+- Collisions only happen when:
+    right-moving asteroid (+) meets a left-moving asteroid (-)
+
+- We simulate the process using a STACK:
+    - Right-moving asteroids are pushed directly.
+    - When a left-moving asteroid appears, it may collide
+      with previously stored right-moving asteroids.
+
+- We keep removing smaller right-moving asteroids until:
+    1) Stack becomes empty
+    2) Top is a left-moving asteroid
+    3) A bigger right-moving asteroid survives
+=====================================================
+*/
+
+/*
+=====================================================
+FUNCTION: asteroidCollision
+-----------------------------------------------------
+Simulates all asteroid collisions using stack logic.
+
+PARAMETERS:
+    arr -> vector of integers representing asteroids
+
+RETURNS:
+    vector<int> -> final asteroid configuration
+=====================================================
 */
 vector<int> asteroidCollision(vector<int>& arr){
-    vector<int> st;  // use vector as a stack
+    vector<int> st;  // Using vector as a stack to store surviving asteroids
 
+    // Traverse each asteroid
     for(int a : arr){
-        if(a > 0) {
-            // Right-moving asteroid, push to stack
-            st.push_back(a);
-        } else {
-            // Left-moving asteroid
-            while(!st.empty() && st.back() > 0 && st.back() < -a)
-                st.pop_back();  // smaller right-moving asteroids explode
 
+        // Case 1: Right-moving asteroid
+        // No collision possible now, so push it
+        if(a > 0) {
+            st.push_back(a);
+        }
+        else {
+            // Case 2: Left-moving asteroid
+            // Possible collision with right-moving asteroids in stack
+
+            // Remove all smaller right-moving asteroids
+            while(!st.empty() && st.back() > 0 && st.back() < -a)
+                st.pop_back();  // smaller asteroid explodes
+
+            // If equal size collision, both explode
             if(!st.empty() && st.back() == -a)
-                st.pop_back(); // equal collision, both explode
+                st.pop_back();
+
+            // If stack is empty OR top is left-moving,
+            // then no collision occurs
             else if(st.empty() || st.back() < 0)
-                st.push_back(a); // no collision, push left-moving asteroid
+                st.push_back(a);
         }
     }
 
     return st;
 }
 
+/*
+=====================================================
+TIME COMPLEXITY:
+-----------------------------------------------------
+O(n)
+- Each asteroid is pushed and popped at most once.
+
+SPACE COMPLEXITY:
+-----------------------------------------------------
+O(n)
+- Stack (vector) can store up to n asteroids.
+=====================================================
+*/
+
 int main() {
-    // Test cases
+    // Sample test cases
     vector<int> asteroids1 = {5, 10, -5};
     vector<int> asteroids2 = {8, -8};
     vector<int> asteroids3 = {10, 2, -5, -15, 20};
