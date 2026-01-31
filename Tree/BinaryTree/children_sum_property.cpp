@@ -4,8 +4,42 @@
 using namespace std;
 
 /*
+====================================================
+PROBLEM STATEMENT
+====================================================
+Given a binary tree, modify it so that it satisfies
+the Children Sum Property (CSP).
+
+Children Sum Property:
+For every non-leaf node:
+    node->data = (left child data) + (right child data)
+
+Rules:
+- You are allowed to only INCREASE node values.
+- Tree structure must remain unchanged.
+- Leaf nodes are always valid.
+
+----------------------------------------------------
+Example:
+        50
+       /  \
+      7    2
+     / \  / \
+    3  5 1  30
+
+After enforcing CSP:
+        100
+       /   \
+     50     50
+    /  \   /  \
+   25  25 20  30
+====================================================
+*/
+
+/*
 Class: TreeNode
-Purpose: Represents a node in a binary tree.
+Purpose:
+Represents a node in a binary tree.
 */
 class TreeNode {
 public:
@@ -21,10 +55,32 @@ public:
 };
 
 /*
+====================================================
+INTUITION / APPROACH
+====================================================
+
+We solve this using a DFS (post-order style) traversal.
+
+Key idea:
+1. First, compare current node value with sum of children.
+2. If children sum is GREATER → update current node.
+3. If current node is GREATER → push its value down
+   to its children.
+4. Recursively fix left and right subtrees.
+5. While returning back (post-order), recompute the
+   current node using updated children values.
+
+Why this works:
+- We never decrease values (only increase).
+- Fixing children first ensures correctness bottom-up.
+====================================================
+*/
+
+/*
 Function: changeTree()
-Purpose : Modifies the given binary tree so that it satisfies the
-          Children Sum Property (CSP):
-          → For every node, node->data = sum of (left->data + right->data)
+Purpose:
+Modifies the binary tree so that it satisfies the
+Children Sum Property.
 */
 void changeTree(TreeNode* root) {
     if (!root) return;
@@ -34,8 +90,13 @@ void changeTree(TreeNode* root) {
     if (root->left) child += root->left->data;
     if (root->right) child += root->right->data;
 
-    // Step 2: If children sum >= node value, update node
-    // Otherwise, push node's value to children
+    /*
+    Step 2:
+    - If children sum >= node value:
+        Update node to children sum
+    - Else:
+        Push node value down to children
+    */
     if (child >= root->data)
         root->data = child;
     else {
@@ -43,11 +104,15 @@ void changeTree(TreeNode* root) {
         if (root->right) root->right->data = root->data;
     }
 
-    // Step 3: Recurse on left and right children
+    // Step 3: Recurse for left and right subtrees
     changeTree(root->left);
     changeTree(root->right);
 
-    // Step 4: Update current node with final children sum
+    /*
+    Step 4 (Post-order fix):
+    After children are fixed, update current node
+    using final children values
+    */
     int tot = 0;
     if (root->left) tot += root->left->data;
     if (root->right) tot += root->right->data;
@@ -57,8 +122,10 @@ void changeTree(TreeNode* root) {
 }
 
 /*
-Helper: printLevelOrder()
-Purpose: Prints tree in level order (BFS traversal)
+Helper Function: printLevelOrder()
+Purpose:
+Prints the binary tree using Level Order Traversal
+(Breadth-First Search).
 */
 void printLevelOrder(TreeNode* root) {
     if (!root) return;
@@ -80,17 +147,17 @@ void printLevelOrder(TreeNode* root) {
 }
 
 /*
-Main Function:
-1. Builds the following binary tree:
-            50
-           /  \
-         7     2
-        / \   / \
-       3  5  1  30
-2. Prints before and after applying Children Sum Property
+====================================================
+MAIN FUNCTION
+====================================================
+1. Builds a sample binary tree
+2. Prints tree before applying CSP
+3. Applies changeTree()
+4. Prints tree after applying CSP
+====================================================
 */
 int main() {
-    // Building sample tree
+    // Constructing the binary tree
     TreeNode* root = new TreeNode(50);
     root->left = new TreeNode(7);
     root->right = new TreeNode(2);
@@ -112,8 +179,16 @@ int main() {
 }
 
 /*
-Time Complexity:  O(N)
-    → Each node is visited once.
+====================================================
+TIME & SPACE COMPLEXITY
+====================================================
+
+Time Complexity: O(N)
+- Each node is visited exactly once.
+
 Space Complexity: O(H)
-    → Recursive stack space, where H = height of tree.
+- Recursive call stack where H = height of tree
+- Worst case (skewed tree): O(N)
+- Best case (balanced tree): O(log N)
+====================================================
 */

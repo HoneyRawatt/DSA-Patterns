@@ -5,14 +5,34 @@
 using namespace std;
 
 /*
+====================================================
+PROBLEM STATEMENT
+====================================================
+Given the root of a binary tree, a target node, and an
+integer K, return all node values that are at distance
+K from the target node.
+
+Distance between two nodes is the number of edges
+between them.
+
+Important:
+- Nodes can be above or below the target.
+- Tree is not a graph, so parent traversal is not
+  directly possible.
+====================================================
+*/
+
+/*
 Class: TreeNode
-Purpose: Represents a node in a binary tree.
+Purpose:
+Represents a node in a binary tree.
 */
 class TreeNode {
 public:
     int data;
     TreeNode* left;
     TreeNode* right;
+
     TreeNode(int data) {
         this->data = data;
         left = nullptr;
@@ -20,8 +40,27 @@ public:
     }
 };
 
-// Mark parents of each node for upward traversal
-void markParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*>& parent_track) {
+/*
+====================================================
+FUNCTION: markParents
+====================================================
+Purpose:
+Creates a mapping from each node to its parent node.
+This allows upward traversal from any node.
+
+Approach:
+- Perform BFS starting from root.
+- For every child, store its parent in the map.
+
+Why needed?
+- Binary tree nodes don't have parent pointers.
+- To move "upward" during BFS from target, we must
+  know each node’s parent.
+====================================================
+*/
+void markParents(TreeNode* root,
+                 unordered_map<TreeNode*, TreeNode*>& parent_track) {
+
     queue<TreeNode*> q;
     q.push(root);
 
@@ -33,6 +72,7 @@ void markParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*>& parent_tra
             parent_track[curr->left] = curr;
             q.push(curr->left);
         }
+
         if (curr->right) {
             parent_track[curr->right] = curr;
             q.push(curr->right);
@@ -40,57 +80,96 @@ void markParents(TreeNode* root, unordered_map<TreeNode*, TreeNode*>& parent_tra
     }
 }
 
-// Returns all nodes at distance K from target
+/*
+====================================================
+FUNCTION: distanceK
+====================================================
+Purpose:
+Returns all nodes that are exactly K distance away
+from the target node.
+
+High-Level Intuition:
+- Convert the tree into an undirected graph:
+  (left, right, parent)
+- Perform BFS starting from target.
+- Stop BFS when distance = K.
+- Collect all nodes at that level.
+
+Steps:
+1. Mark parent of each node.
+2. Start BFS from target node.
+3. Track visited nodes to avoid infinite loops.
+4. Move level-by-level until distance K.
+====================================================
+*/
 vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
+
+    // Step 1: Store parent pointers
     unordered_map<TreeNode*, TreeNode*> parent_track;
     markParents(root, parent_track);
 
+    // Step 2: BFS from target node
     unordered_map<TreeNode*, bool> visited;
     queue<TreeNode*> q;
+
     q.push(target);
     visited[target] = true;
 
     int currLevel = 0;
+
+    // Step 3: Traverse level by level
     while (!q.empty()) {
         int size = q.size();
+
+        // Stop BFS once we reach distance K
         if (currLevel++ == k) break;
 
         for (int i = 0; i < size; i++) {
             TreeNode* curr = q.front();
             q.pop();
 
+            // Visit left child
             if (curr->left && !visited[curr->left]) {
                 q.push(curr->left);
                 visited[curr->left] = true;
             }
+
+            // Visit right child
             if (curr->right && !visited[curr->right]) {
                 q.push(curr->right);
                 visited[curr->right] = true;
             }
-            if (parent_track.find(curr) != parent_track.end() && !visited[parent_track[curr]]) {
+
+            // Visit parent
+            if (parent_track.find(curr) != parent_track.end() &&
+                !visited[parent_track[curr]]) {
+
                 q.push(parent_track[curr]);
                 visited[parent_track[curr]] = true;
             }
         }
     }
 
+    // Step 4: Remaining nodes in queue are at distance K
     vector<int> res;
     while (!q.empty()) {
         res.push_back(q.front()->data);
         q.pop();
     }
+
     return res;
 }
 
 int main() {
+
     /*
-          3
-         / \
-        5   1
-       / \  / \
-      6  2 0   8
-        / \
-       7   4
+              3
+             / \
+            5   1
+           / \  / \
+          6  2 0   8
+            / \
+           7   4
     */
 
     TreeNode* root = new TreeNode(3);
@@ -108,7 +187,9 @@ int main() {
 
     vector<int> result = distanceK(root, target, k);
 
-    cout << "Nodes at distance " << k << " from target " << target->data << ": ";
+    cout << "Nodes at distance " << k
+         << " from target " << target->data << ": ";
+
     for (int val : result) {
         cout << val << " ";
     }
@@ -118,13 +199,17 @@ int main() {
 }
 
 /*
+====================================================
+TIME & SPACE COMPLEXITY
+====================================================
+
 Time Complexity: O(N)
-    - Marking parents: visits each node once → O(N)
-    - BFS to find distance K: each node visited at most once → O(N)
-    Total = O(N)
+- Marking parents visits each node once → O(N)
+- BFS traversal visits each node at most once → O(N)
 
 Space Complexity: O(N)
-    - Parent map: stores parent of each node → O(N)
-    - Visited map: stores visited nodes → O(N)
-    - Queue: stores nodes level-wise → O(N)
+- Parent map stores up to N entries
+- Visited map stores up to N nodes
+- BFS queue can hold up to N nodes in worst case
+====================================================
 */

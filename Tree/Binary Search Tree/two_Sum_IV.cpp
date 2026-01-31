@@ -4,48 +4,100 @@
 using namespace std;
 
 /*
+====================================================
+📌 Problem Statement
+====================================================
+Given the root of a Binary Search Tree (BST) and an
+integer k, determine whether there exist two distinct
+nodes in the BST such that their values sum up to k.
+
+Constraints:
+- Each node can be used at most once
+- BST property must be leveraged for efficiency
+====================================================
+*/
+
+/*
 Class: TreeNode
-Purpose: Represents a node in a binary search tree (BST)
+Purpose: Represents a node in a Binary Search Tree (BST)
 */
 class TreeNode {
 public:
     int val;
     TreeNode* left;
     TreeNode* right;
+
     TreeNode(int val) {
         this->val = val;
         left = right = nullptr;
     }
 };
 
-// BST Iterator class supporting normal and reverse in-order traversal
+/*
+====================================================
+Class: BSTIterator
+====================================================
+💡 Purpose:
+- Supports inorder traversal of BST.
+- Can work in:
+  - Normal inorder (ascending order)
+  - Reverse inorder (descending order)
+
+💡 Intuition:
+- Inorder traversal of BST gives sorted values.
+- Reverse inorder gives values in decreasing order.
+- Using two iterators allows a "two-pointer" technique
+  directly on the BST without storing all values.
+====================================================
+*/
 class BSTIterator {
     stack<TreeNode*> st;
-    bool reverse; // false = normal inorder, true = reverse inorder
+    bool reverse; // false → normal inorder, true → reverse inorder
 
 public:
+    /*
+    Constructor:
+    - Initializes iterator direction.
+    - Pushes all required nodes into stack.
+    */
     BSTIterator(TreeNode* root, bool isReverse) {
         reverse = isReverse;
         pushAll(root);
     }
 
+    /*
+    Function: hasNext
+    Purpose:
+    - Checks if there is a next element available
+    */
     bool hasNext() {
         return !st.empty();
     }
 
+    /*
+    Function: next
+    Purpose:
+    - Returns the next element based on traversal order
+    */
     int next() {
         TreeNode* tmp = st.top();
         st.pop();
 
+        // Move iterator forward based on traversal direction
         if (!reverse)
-            pushAll(tmp->right); // normal inorder: push right subtree
+            pushAll(tmp->right); // normal inorder
         else
-            pushAll(tmp->left);  // reverse inorder: push left subtree
+            pushAll(tmp->left);  // reverse inorder
 
         return tmp->val;
     }
 
 private:
+    /*
+    Helper Function: pushAll
+    Purpose:
+    - Pushes nodes into stack following traversal direction
+    */
     void pushAll(TreeNode* node) {
         while (node != nullptr) {
             st.push(node);
@@ -57,12 +109,34 @@ private:
     }
 };
 
-// Function to check if there exists a pair with sum k in BST
+/*
+====================================================
+🟩 OPTIMAL APPROACH (Two Iterators)
+====================================================
+💡 Idea:
+- Use two BST iterators:
+  - One from smallest value (left iterator)
+  - One from largest value (right iterator)
+- Apply two-pointer technique like a sorted array
+
+Steps:
+1️⃣ Get smallest value using inorder iterator
+2️⃣ Get largest value using reverse inorder iterator
+3️⃣ Compare sum with k
+   - If sum == k → return true
+   - If sum < k → move left iterator
+   - If sum > k → move right iterator
+
+Time Complexity:  O(n)
+Space Complexity: O(h)
+(where h = height of BST)
+====================================================
+*/
 bool findTarget(TreeNode* root, int k) {
     if (!root) return false;
 
-    BSTIterator leftIter(root, false);  // normal inorder
-    BSTIterator rightIter(root, true);  // reverse inorder
+    BSTIterator leftIter(root, false);  // smallest → largest
+    BSTIterator rightIter(root, true);  // largest → smallest
 
     int i = leftIter.next();
     int j = rightIter.next();
@@ -75,7 +149,18 @@ bool findTarget(TreeNode* root, int k) {
     return false;
 }
 
-// Helper function: inorder traversal to store BST elements in sorted order
+/*
+====================================================
+🟥 BRUTE FORCE APPROACH
+====================================================
+💡 Idea:
+- Store inorder traversal in a vector (sorted list)
+- Apply two-pointer technique on vector
+
+Time Complexity:  O(n)
+Space Complexity: O(n)
+====================================================
+*/
 void inorderTraversal(TreeNode* root, vector<int>& nums) {
     if (!root) return;
     inorderTraversal(root->left, nums);
@@ -83,24 +168,27 @@ void inorderTraversal(TreeNode* root, vector<int>& nums) {
     inorderTraversal(root->right, nums);
 }
 
-// Brute-force approach: use vector + two pointers
 bool findTargetBrute(TreeNode* root, int k) {
     vector<int> nums;
-    inorderTraversal(root, nums); // O(n) time, O(n) space
+    inorderTraversal(root, nums);
 
     int left = 0;
     int right = nums.size() - 1;
 
-    while (left < right) { // O(n) time
+    while (left < right) {
         int sum = nums[left] + nums[right];
         if (sum == k) return true;
         else if (sum < k) left++;
         else right--;
     }
-
     return false;
 }
-// Main function for testing
+
+/*
+====================================================
+🧪 Main Function (Testing)
+====================================================
+*/
 int main() {
     /*
            5
@@ -124,3 +212,19 @@ int main() {
 
     return 0;
 }
+
+/*
+====================================================
+🧠 Final Complexity Comparison
+====================================================
+
+Brute Force:
+- Time:  O(n)
+- Space: O(n)
+
+Optimal (BST Iterators):
+- Time:  O(n)
+- Space: O(h)  ← better
+
+====================================================
+*/

@@ -2,6 +2,19 @@
 using namespace std;
 
 /*
+====================================================
+PROBLEM STATEMENT
+====================================================
+Count the number of nodes in a COMPLETE binary tree.
+
+A complete binary tree:
+- All levels are completely filled except possibly the last
+- The last level is filled from left to right
+
+We use an optimized approach instead of normal traversal.
+====================================================
+*/
+/*
 Class: TreeNode
 Purpose: Represents a node in a binary tree
 */

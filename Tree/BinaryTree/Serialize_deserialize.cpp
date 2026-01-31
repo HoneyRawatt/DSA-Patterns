@@ -1,12 +1,39 @@
-#include <iostream>
+#include <iostream> 
 #include <vector>
 #include <queue>
 #include <sstream>
 using namespace std;
 
 /*
+===============================================================================
+Problem Statement:
+-------------------------------------------------------------------------------
+Design a mechanism to serialize and deserialize a binary tree.
+
+Serialization:
+- Convert a binary tree into a string representation so it can be stored or
+  transmitted.
+- Null nodes must also be represented to preserve tree structure.
+
+Deserialization:
+- Reconstruct the original binary tree from the serialized string.
+
+Constraints / Notes:
+- Node values are integers.
+- Tree structure must remain unchanged after deserialization.
+- The serialized format should allow unambiguous reconstruction.
+
+Approach Used:
+- Level Order Traversal (Breadth-First Search)
+- Use '#' to represent NULL nodes
+===============================================================================
+*/
+
+/*
 Class: TreeNode
-Purpose: Represents a node in a binary tree
+Purpose:
+- Represents a single node in a binary tree.
+- Each node stores an integer value and pointers to left & right children.
 */
 class TreeNode {
 public:
@@ -22,11 +49,31 @@ public:
 };
 
 /*
+===============================================================================
 Function: serialize
-Purpose: Convert a binary tree into a string using level-order traversal
+-------------------------------------------------------------------------------
+Purpose:
+- Converts a binary tree into a string using level-order traversal (BFS).
+
+Intuition:
+- Traverse the tree level by level.
+- Append node values to the string.
+- Use "#" to represent NULL children.
+- Commas are used as separators.
+
+Why Level Order?
+- Ensures structure (including missing children) is preserved.
+
+Input:
+- root : pointer to the root of the binary tree
+
+Output:
+- A serialized string representation of the tree
+===============================================================================
 */
 string serialize(TreeNode* root) {
-    if (!root) return "#,";  // empty tree
+    if (!root) return "#,";  // Empty tree case
+
     string s = "";
     queue<TreeNode*> q;
     q.push(root);
@@ -36,7 +83,7 @@ string serialize(TreeNode* root) {
         q.pop();
 
         if (curr == nullptr) {
-            s.append("#,");
+            s.append("#,");   // Marker for NULL node
         } else {
             s.append(to_string(curr->val) + ",");
             q.push(curr->left);
@@ -47,8 +94,23 @@ string serialize(TreeNode* root) {
 }
 
 /*
+===============================================================================
 Function: deserialize
-Purpose: Reconstruct the binary tree from its serialized string
+-------------------------------------------------------------------------------
+Purpose:
+- Reconstructs the binary tree from the serialized string.
+
+Intuition:
+- Read values one by one using stringstream.
+- Rebuild the tree using level-order traversal.
+- Use queue to assign left and right children correctly.
+
+Input:
+- data : serialized string of the tree
+
+Output:
+- Pointer to the root of the reconstructed binary tree
+===============================================================================
 */
 TreeNode* deserialize(string data) {
     if (data.size() == 0) return nullptr;
@@ -56,6 +118,7 @@ TreeNode* deserialize(string data) {
     stringstream s(data);
     string str;
 
+    // Read root value
     getline(s, str, ',');
     if (str == "#") return nullptr;
 
@@ -67,7 +130,7 @@ TreeNode* deserialize(string data) {
         TreeNode* node = q.front();
         q.pop();
 
-        // Left child
+        // Process left child
         if (!getline(s, str, ',')) break;
         if (str == "#") {
             node->left = nullptr;
@@ -77,7 +140,7 @@ TreeNode* deserialize(string data) {
             q.push(leftNode);
         }
 
-        // Right child
+        // Process right child
         if (!getline(s, str, ',')) break;
         if (str == "#") {
             node->right = nullptr;
@@ -91,7 +154,10 @@ TreeNode* deserialize(string data) {
 }
 
 /*
-Helper function to print the tree (Inorder traversal)
+Helper Function: inorder
+Purpose:
+- Prints inorder traversal of the tree.
+- Used to verify correctness after deserialization.
 */
 void inorder(TreeNode* root) {
     if (!root) return;
@@ -101,10 +167,16 @@ void inorder(TreeNode* root) {
 }
 
 /*
-Main function for testing
+===============================================================================
+Main Function:
+-------------------------------------------------------------------------------
+1. Creates a sample binary tree.
+2. Serializes the tree.
+3. Deserializes the string back into a tree.
+4. Prints inorder traversal to verify correctness.
+===============================================================================
 */
 int main() {
-    // Create a test binary tree
     /*
               1
              / \
@@ -131,7 +203,20 @@ int main() {
     return 0;
 }
 
+/*
+===============================================================================
+Time & Space Complexity Analysis:
+-------------------------------------------------------------------------------
+Time Complexity: O(N)
+- Serialization visits every node once → O(N)
+- Deserialization also processes every node once → O(N)
 
-// Aspect	Complexity	Explanation
-// Time	O(N)	Every node is visited once during serialization & deserialization
-// Space	O(N)	Queue stores up to all nodes in one level at a time
+Space Complexity: O(N)
+- Queue can store up to N nodes (worst case)
+- Serialized string size is proportional to N
+- Overall auxiliary space is linear
+
+Where:
+- N = number of nodes in the binary tree
+===============================================================================
+*/

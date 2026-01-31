@@ -1,3 +1,29 @@
+// 🧩 Problem Statement: Diameter of a Binary Tree
+
+// Given the root of a binary tree, find the diameter of the tree.
+
+// The diameter of a binary tree is defined as the length of the longest path between any two nodes in the tree.
+// This path may or may not pass through the root.
+
+// The length of the path is measured as the number of edges between the two nodes.
+
+// A path is a sequence of nodes where each consecutive pair is connected by an edge.
+
+// ✍️ Example
+
+// For the binary tree:
+
+//         1
+//        / \
+//       2   3
+//      / \
+//     4   5
+
+
+// The longest path is:
+// 4 → 2 → 5 (or 4 → 2 → 1 → 3)
+
+// So, the diameter = 3 edges.
 #include <iostream>
 #include <algorithm>
 using namespace std;
