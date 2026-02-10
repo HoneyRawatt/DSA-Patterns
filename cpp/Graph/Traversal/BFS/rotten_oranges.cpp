@@ -2,73 +2,120 @@
 using namespace std;
 
 /*
-Approach:
----------
-We use a BFS (Breadth-First Search) to simulate the rotting process of oranges.
+====================================================
+PROBLEM STATEMENT (Rotting Oranges):
+====================================================
+You are given a 2D grid where:
+- 0 represents an empty cell
+- 1 represents a fresh orange
+- 2 represents a rotten orange
 
-1️⃣ Each rotten orange acts as a source and starts infecting adjacent fresh oranges.
-2️⃣ We push all initially rotten oranges (value = 2) into a queue with time = 0.
-3️⃣ Then, for each rotten orange, we check its 4 adjacent cells:
-    - If a neighbor is fresh (value = 1), it becomes rotten, 
-      and we push it into the queue with time + 1.
-4️⃣ We track the total time taken to rot all oranges and the count of fresh oranges.
-5️⃣ If after BFS some fresh oranges are left, return -1; otherwise, return total time.
+Every minute, a rotten orange can rot its
+4-directionally adjacent fresh oranges.
 
-Time Complexity:  O(N * M)
-    - Each cell is visited at most once.
+Return the minimum time required to rot all oranges.
+If it is impossible to rot all oranges, return -1.
 
-Space Complexity: O(N * M)
-    - We use a queue and a visited matrix of size N x M.
-
+This is a classic MULTI-SOURCE BFS problem.
+====================================================
 */
 
-int orangeRotting(vector<vector<int>> &grid) {
-    int n = grid.size();
-    int m = grid[0].size();
+/*
+====================================================
+APPROACH:
+====================================================
+We use Breadth First Search (BFS) to simulate
+the rotting process level by level (minute by minute).
 
-    queue<pair<pair<int, int>, int>> q; // {{row, col}, time}
+1️⃣ Each rotten orange is treated as a source.
+2️⃣ Push all initially rotten oranges into a queue
+   with time = 0.
+3️⃣ From each rotten orange, rot all adjacent
+   fresh oranges and push them into the queue
+   with time + 1.
+4️⃣ Track:
+   - Total time taken
+   - Number of fresh oranges rotted
+5️⃣ If all fresh oranges are rotted → return time
+   Else → return -1
+====================================================
+*/
+
+/*
+----------------------------------------------------
+Function: orangeRotting
+----------------------------------------------------
+Parameters:
+- grid : 2D matrix representing the orange grid
+
+Returns:
+- Minimum time to rot all oranges
+- -1 if impossible
+----------------------------------------------------
+*/
+int orangeRotting(vector<vector<int>> &grid) {
+    int n = grid.size();        // number of rows
+    int m = grid[0].size();     // number of columns
+
+    // Queue stores: {{row, col}, time}
+    queue<pair<pair<int, int>, int>> q;
+
+    // Visited matrix to mark rotten oranges
     vector<vector<int>> vis(n, vector<int>(m, 0));
 
-    int cntfresh = 0;
+    int cntfresh = 0;  // total number of fresh oranges
 
-    // Step 1: Initialize queue with all initially rotten oranges
+    /*
+    ------------------------------------------------
+    Step 1: Push all initially rotten oranges
+    ------------------------------------------------
+    */
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
             if (grid[i][j] == 2) {
-                q.push({{i, j}, 0});
+                q.push({{i, j}, 0});  // rotten orange with time = 0
                 vis[i][j] = 2;
             } else {
                 vis[i][j] = 0;
             }
+
             if (grid[i][j] == 1)
-                cntfresh++;
+                cntfresh++;          // count fresh oranges
         }
     }
 
-    int tm = 0;   // Maximum time taken to rot all oranges
-    int cnt = 0;  // Count of fresh oranges that got rotten
+    int tm = 0;   // maximum time taken
+    int cnt = 0;  // number of fresh oranges that got rotten
 
+    // Direction arrays: up, right, down, left
     int delrow[] = {-1, 0, 1, 0};
     int delcol[] = {0, 1, 0, -1};
 
-    // Step 2: BFS traversal
+    /*
+    ------------------------------------------------
+    Step 2: BFS Traversal
+    ------------------------------------------------
+    */
     while (!q.empty()) {
         int r = q.front().first.first;
         int c = q.front().first.second;
         int t = q.front().second;
         q.pop();
 
-        tm = max(tm, t);
+        tm = max(tm, t);  // update maximum time
 
-        // Check all 4 directions
+        // Explore all 4 adjacent cells
         for (int i = 0; i < 4; i++) {
             int nrow = r + delrow[i];
             int ncol = c + delcol[i];
 
-            // If within bounds and the orange is fresh
-            if (nrow >= 0 && nrow < n && ncol >= 0 && ncol < m &&
-                vis[nrow][ncol] != 2 && grid[nrow][ncol] == 1) {
+            // Check bounds and if the orange is fresh
+            if (nrow >= 0 && nrow < n &&
+                ncol >= 0 && ncol < m &&
+                vis[nrow][ncol] != 2 &&
+                grid[nrow][ncol] == 1) {
 
+                // Rot the fresh orange
                 q.push({{nrow, ncol}, t + 1});
                 vis[nrow][ncol] = 2;
                 cnt++;
@@ -76,13 +123,23 @@ int orangeRotting(vector<vector<int>> &grid) {
         }
     }
 
-    // Step 3: If not all fresh oranges rotted
+    /*
+    ------------------------------------------------
+    Step 3: Final Check
+    ------------------------------------------------
+    */
+    // If not all fresh oranges were rotted
     if (cnt != cntfresh)
         return -1;
 
     return tm;
 }
 
+/*
+----------------------------------------------------
+Main Function
+----------------------------------------------------
+*/
 int main() {
     vector<vector<int>> grid = {
         {2, 1, 1},
@@ -95,3 +152,32 @@ int main() {
 
     return 0;
 }
+
+/*
+====================================================
+INTUITION:
+====================================================
+- Each rotten orange spreads rot to its neighbors.
+- BFS naturally processes cells level by level,
+  making it ideal for time-based simulations.
+- Multi-source BFS ensures all initial rotten
+  oranges spread simultaneously.
+
+====================================================
+TIME COMPLEXITY:
+====================================================
+Let N = number of rows, M = number of columns
+
+- Each cell is visited at most once.
+
+Time Complexity: O(N * M)
+
+====================================================
+SPACE COMPLEXITY:
+====================================================
+- Visited matrix: O(N * M)
+- Queue (worst case): O(N * M)
+
+Total Space Complexity: O(N * M)
+====================================================
+*/

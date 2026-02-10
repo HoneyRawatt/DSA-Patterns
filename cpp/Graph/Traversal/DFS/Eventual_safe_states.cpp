@@ -1,36 +1,93 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// DFS helper to detect cycle and mark safe nodes
-bool dfscheck(int node, vector<int> adj[], vector<int>& vis, vector<int>& check) {
-    vis[node] = 2;       // node is in current DFS path
-    check[node] = 0;     // assume unsafe initially
+/*
+=====================================================
+Problem Statement:
+=====================================================
+You are given a directed graph with V vertices
+(numbered from 0 to V-1) and an adjacency list `adj`.
 
+A node is called an **eventual safe node** if:
+- Every possible path starting from this node
+  eventually ends at a terminal node (a node with
+  no outgoing edges).
+- No path starting from this node leads to a cycle.
+
+Your task is to return all the eventual safe nodes
+of the graph in increasing order.
+
+This problem is commonly known as:
+➡ LeetCode 802 – Eventual Safe States
+=====================================================
+*/
+
+/*
+=====================================================
+DFS helper function
+Purpose:
+- Detect cycles in a directed graph
+- Mark nodes as safe or unsafe using DFS coloring
+
+vis states:
+0 → unvisited
+1 → fully processed (safe or unsafe determined)
+2 → currently in DFS path (used to detect cycles)
+
+check array:
+1 → safe node
+0 → unsafe node (part of or leads to a cycle)
+=====================================================
+*/
+bool dfscheck(int node, vector<int> adj[],
+              vector<int>& vis, vector<int>& check) {
+
+    // Mark current node as being in the DFS recursion path
+    vis[node] = 2;
+
+    // Assume node is unsafe initially
+    check[node] = 0;
+
+    // Explore all outgoing edges
     for (auto it : adj[node]) {
+
+        // If neighbor is unvisited
         if (vis[it] == 0) {
             if (dfscheck(it, adj, vis, check)) {
-                check[node] = 0; // part of cycle
+                // Cycle found downstream → current node unsafe
+                check[node] = 0;
                 return true;
             }
-        } 
-        else if (vis[it] == 2) { // back edge found → cycle
+        }
+        // If neighbor is already in current DFS path → cycle
+        else if (vis[it] == 2) {
             check[node] = 0;
             return true;
         }
     }
 
-    vis[node] = 1;   // mark as processed
-    check[node] = 1; // node is safe (no cycle through it)
+    // No cycle found from this node
+    vis[node] = 1;   // mark as fully processed
+    check[node] = 1; // mark as safe
+
     return false;
 }
 
-// Function to return all eventual safe nodes
+/*
+=====================================================
+Function: eventualSafeNodes
+Purpose:
+- Runs DFS for each node
+- Identifies nodes that do not lead to any cycle
+=====================================================
+*/
 vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
-    vector<int> vis(V, 0);
-    vector<int> check(V, 0);
+
+    vector<int> vis(V, 0);    // DFS state array
+    vector<int> check(V, 0);  // Safe/unsafe marker
     vector<int> safeNodes;
 
-    // Run DFS for all unvisited nodes
+    // Run DFS for all nodes (handles disconnected graph)
     for (int i = 0; i < V; i++) {
         if (vis[i] == 0) {
             dfscheck(i, adj, vis, check);
@@ -48,10 +105,19 @@ vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
 
 // ---------------- MAIN FUNCTION ----------------
 int main() {
+
     int V = 7;
     vector<int> adj[V];
 
-    // Example: graph from LeetCode 802 - Eventual Safe States
+    /*
+        Example Graph:
+        0 → 1 → 3 → 0   (cycle)
+        ↓
+        2 → 5          (safe)
+        4 → 5          (safe)
+        6              (safe)
+    */
+
     adj[0] = {1, 2};
     adj[1] = {2, 3};
     adj[2] = {5};
@@ -71,8 +137,18 @@ int main() {
 }
 
 /*
-🔹 Time Complexity: O(V + E)
-   - Each node and edge is visited once in DFS.
-🔹 Space Complexity: O(V)
-   - For vis[], check[], and recursion stack.
+=====================================================
+Time Complexity:
+=====================================================
+O(V + E)
+- Each vertex is processed once
+- Each edge is visited once
+
+=====================================================
+Space Complexity:
+=====================================================
+O(V)
+- vis[] and check[] arrays
+- DFS recursion stack
+=====================================================
 */

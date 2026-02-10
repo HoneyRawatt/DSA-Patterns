@@ -2,19 +2,41 @@
 using namespace std;
 
 /*
+====================================================
+PROBLEM STATEMENT:
+====================================================
+You are given an adjacency matrix representing connections
+between cities. A group of directly or indirectly connected
+cities forms a "province".
+
+- adjMatrix[i][j] = 1 means city i is directly connected to city j
+- adjMatrix[i][i] = 1 (a city is connected to itself)
+
+Your task is to find the total number of provinces.
+
+This is equivalent to finding the number of
+CONNECTED COMPONENTS in an undirected graph.
+====================================================
+*/
+
+/*
+----------------------------------------------------
 DFS Function
+----------------------------------------------------
 Parameters:
-- node: current node to start DFS
-- adj: adjacency list representation of the graph
-- vis: array to track visited nodes
-- ls: vector to store DFS traversal order (optional)
+- node : current node to start DFS
+- adj  : adjacency list of the graph
+- vis  : visited array
+- ls   : stores DFS traversal order (optional)
+
 Purpose:
 - Marks the current node as visited
 - Recursively visits all unvisited neighbors
+----------------------------------------------------
 */
-void dfs(int node, vector<int> adj[], int vis[], vector<int> &ls) {
-    vis[node] = 1;
-    ls.push_back(node);
+void dfs(int node, vector<int> adj[], vector<int> &vis, vector<int> &ls) {
+    vis[node] = 1;        // mark current node as visited
+    ls.push_back(node);   // add node to DFS traversal
 
     for (auto it : adj[node]) {
         if (!vis[it]) {
@@ -24,69 +46,101 @@ void dfs(int node, vector<int> adj[], int vis[], vector<int> &ls) {
 }
 
 /*
-numprovinces Function
+----------------------------------------------------
+numProvinces Function
+----------------------------------------------------
 Parameters:
-- adjMatrix: adjacency matrix representing the cities and connections
-- v: number of cities (nodes)
+- adjMatrix : adjacency matrix representation
+- v         : number of cities (vertices)
+
 Purpose:
 - Converts adjacency matrix to adjacency list
 - Uses DFS to count connected components (provinces)
-- Returns the number of provinces
+- Returns total number of provinces
+----------------------------------------------------
 */
-int numprovinces(vector<vector<int>> adjMatrix, int v) {
-    vector<int> graph[v];  // adjacency list
+int numProvinces(vector<vector<int>> &adjMatrix, int v) {
 
-    // Convert adjacency matrix to adjacency list
+    // Step 1: Convert adjacency matrix to adjacency list
+    vector<int> adj[v];
     for (int i = 0; i < v; i++) {
         for (int j = 0; j < v; j++) {
             if (adjMatrix[i][j] == 1 && i != j) {
-                graph[i].push_back(j);  // add edge from i to j
+                adj[i].push_back(j);
             }
         }
     }
 
-    int vis[v] = {0};  // visited array initialized to 0
-    int cnt = 0;       // count of provinces (connected components)
+    // Step 2: Visited array
+    vector<int> vis(v, 0);
+    int cnt = 0; // number of provinces
 
-    // Traverse all nodes
+    // Step 3: Run DFS for each unvisited node
     for (int i = 0; i < v; i++) {
-        if (!vis[i]) {          // if not visited
-            vector<int> ls;     // store DFS traversal (optional)
-            cnt++;              // new province found
-            dfs(i, graph, vis, ls);
+        if (!vis[i]) {
+            vector<int> ls; // optional DFS traversal list
+            cnt++;          // new province found
+            dfs(i, adj, vis, ls);
         }
     }
 
     return cnt;
 }
 
+/*
+----------------------------------------------------
+Main Function
+----------------------------------------------------
+*/
 int main() {
     vector<vector<int>> adj = {
         {1, 1, 0},
         {1, 1, 0},
         {0, 0, 1}
     };
+
     int v = adj.size();
-    cout << "Number of provinces: " << numprovinces(adj, v) << endl;
+
+    cout << "Number of provinces: " << numProvinces(adj, v) << endl;
+    return 0;
 }
 
 /*
-Approach:
-1. Convert the given adjacency matrix to an adjacency list for easier traversal.
-2. Initialize a visited array to keep track of visited cities.
-3. For each unvisited city, start a DFS traversal:
-   - Mark all cities reachable from it as visited.
-   - Increment the province count.
-4. Return the total number of provinces (connected components).
+====================================================
+INTUITION:
+====================================================
+- Each province is a connected component.
+- Starting DFS from an unvisited city will visit
+  all cities in the same province.
+- Counting how many times DFS is initiated gives
+  the total number of provinces.
 
-Time Complexity:
-- Converting adjacency matrix to adjacency list: O(V^2)
-- DFS traversal: O(V + E), where V = number of nodes, E = number of edges
-- Overall: O(V^2) (since E can be at most V^2 in a dense graph)
+====================================================
+APPROACH:
+====================================================
+1. Convert adjacency matrix into adjacency list.
+2. Maintain a visited array.
+3. Traverse all nodes:
+   - If a node is unvisited, start DFS.
+   - Mark all reachable nodes as visited.
+   - Increment province count.
+4. Return the count.
 
-Space Complexity:
-- Adjacency list: O(V + E) ~ O(V^2) in worst case
+====================================================
+TIME COMPLEXITY:
+====================================================
+- Matrix → List conversion: O(V²)
+- DFS traversal: O(V + E)
+- Overall Time Complexity: O(V²)
+  (since E can be at most V²)
+
+====================================================
+SPACE COMPLEXITY:
+====================================================
+- Adjacency list: O(V + E) → O(V²) worst case
 - Visited array: O(V)
 - DFS recursion stack: O(V)
-- Overall: O(V^2)
+
+Overall Space Complexity: O(V²)
+====================================================
 */

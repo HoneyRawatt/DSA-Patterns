@@ -1,7 +1,21 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Function to perform Topological Sort using Kahn's Algorithm (BFS)
+/*
+Problem Statement:
+Given a Directed Acyclic Graph (DAG) with V vertices and adjacency list `adj[]`,
+perform a Topological Sort of the vertices. In a topological ordering, for every 
+directed edge u -> v, vertex u comes before vertex v in the ordering.
+
+Intuition (Kahn's Algorithm - BFS):
+- Compute the indegree of each node (number of incoming edges).
+- All nodes with indegree 0 can appear first in the ordering.
+- Use a queue to perform BFS: repeatedly remove nodes with indegree 0, and 
+  decrease the indegree of their neighbors.
+- When a neighbor's indegree becomes 0, it is ready to be added to the ordering.
+- Continue until all nodes are processed. This gives a valid topological sort.
+*/
+
 vector<int> topoSort(int V, vector<int> adj[]) {
     vector<int> indegree(V, 0);
 
@@ -20,17 +34,19 @@ vector<int> topoSort(int V, vector<int> adj[]) {
         }
     }
 
-    // Step 3: BFS traversal
-    vector<int> topo;
+    // Step 3: BFS traversal to generate topological ordering
+    vector<int> topo; // vector to store topological order
     while (!q.empty()) {
         int node = q.front();
         q.pop();
         topo.push_back(node);
 
-        // Reduce indegree of all adjacent nodes
+        // Step 4: Reduce indegree of all adjacent nodes
         for (auto it : adj[node]) {
             indegree[it]--;
-            if (indegree[it] == 0) q.push(it);
+            if (indegree[it] == 0) {
+                q.push(it); // ready to process next
+            }
         }
     }
 
@@ -61,7 +77,9 @@ int main() {
 
 /*
 Time Complexity:  O(V + E)
-    - Each vertex and edge is processed once.
+    - Each vertex is processed once when added to the queue.
+    - Each edge is visited once when reducing indegrees.
+
 Space Complexity: O(V)
-    - For indegree array, queue, and topo vector.
+    - For the indegree array, queue, and the vector storing the topological order.
 */
